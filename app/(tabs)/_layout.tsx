@@ -1,35 +1,87 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import React from "react";
+import { Tabs } from "expo-router";
+import { colors } from "@/constants/color";
+import {
+  HomeFilled,
+  HomeOutlined,
+  ExploreFilled,
+  ExploreOutlined,
+  LibraryFilled,
+  LibraryOutlined,
+} from "@/components/svg";
+import { useTheme } from "@/hooks/useTheme";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+  const { theme } = useTheme();
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor:
+          theme === "light"
+            ? colors.light.tabIconSelected
+            : colors.dark.tabIconSelected,
         headerShown: false,
-      }}>
+        tabBarStyle: {
+          paddingBottom: 5,
+          backgroundColor:
+            theme === "light"
+              ? colors.light.background
+              : colors.dark.background,
+        },
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="(home)"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-          ),
+          title: "Home",
+          tabBarIcon: ({ color, focused }) =>
+            focused ? (
+              <HomeFilled
+                fill={
+                  theme === "light"
+                    ? colors.light.tabIconSelected
+                    : colors.dark.tabIconSelected
+                }
+              />
+            ) : (
+              <HomeOutlined fill={color} />
+            ),
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
+          title: "Explore",
+          tabBarIcon: ({ color, focused }) =>
+            focused ? (
+              <ExploreFilled
+                fill={
+                  theme === "light"
+                    ? colors.light.tabIconSelected
+                    : colors.dark.tabIconSelected
+                }
+              />
+            ) : (
+              <ExploreOutlined fill={color} />
+            ),
+        }}
+      />
+      <Tabs.Screen
+        name="library"
+        options={{
+          title: "Library",
+          tabBarIcon: ({ color, focused }) =>
+            focused ? (
+              <LibraryFilled
+                fill={
+                  theme === "light"
+                    ? colors.light.tabIconSelected
+                    : colors.dark.tabIconSelected
+                }
+              />
+            ) : (
+              <LibraryOutlined fill={color} />
+            ),
         }}
       />
     </Tabs>

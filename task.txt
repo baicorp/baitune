@@ -1,0 +1,8 @@
+# COMPLETE
+* data extractor playlist 
+* data extractor album
+* song item component
+
+# TASK
+* data extractor channel, search, home
+* dynamic render component

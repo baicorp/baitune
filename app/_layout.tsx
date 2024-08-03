@@ -37,6 +37,7 @@ export default function RootLayout() {
 }
 
 function RootNavigation() {
+  const { theme } = useTheme();
   return (
     <>
       <Stack>
@@ -50,11 +51,35 @@ function RootNavigation() {
         />
         <Stack.Screen
           name="playlist/[browseId]"
-          options={{ headerShown: false, animation: "none" }}
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor:
+                theme === "light"
+                  ? colors.light.background
+                  : colors.dark.background,
+            },
+            headerTintColor:
+              theme === "light" ? colors.light.text : colors.dark.text,
+            headerTitle: "",
+            animation: "none",
+          }}
         />
         <Stack.Screen
           name="album/[browseId]"
-          options={{ headerShown: false, animation: "none" }}
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor:
+                theme === "light"
+                  ? colors.light.background
+                  : colors.dark.background,
+            },
+            headerTintColor:
+              theme === "light" ? colors.light.text : colors.dark.text,
+            headerTitle: "",
+            animation: "none",
+          }}
         />
       </Stack>
       {/* <Player /> */}

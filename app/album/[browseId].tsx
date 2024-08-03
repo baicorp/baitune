@@ -1,14 +1,18 @@
 import React from "react";
-import { StatusScreen, ThemedSafeAreaView } from "@/components/shared";
+import { StatusScreen, ThemedView } from "@/components/shared";
 import { useLocalSearchParams } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { SongItem } from "@/components/cardItem";
 import { ListSongHeader, ItemSeparator } from "@/components/flashlist";
 import useSWR from "swr";
 import { getAlbum } from "@/fetch-data/data";
+import { AlbumVariantProps } from "@/constants/type";
+import { useTheme } from "@/hooks/useTheme";
+import { colors } from "@/constants/color";
 
 export default function AlbumScreen() {
   const { browseId } = useLocalSearchParams();
+  const { theme } = useTheme();
   const { data: albumData, isLoading, error } = useSWR(browseId, getAlbum);
   if (isLoading) {
     return <StatusScreen message="Loading . . ." />;
@@ -19,11 +23,10 @@ export default function AlbumScreen() {
   }
 
   return (
-    <ThemedSafeAreaView>
+    <ThemedView>
       <FlashList
-        data={albumData.contents}
+        data={albumData.contents as AlbumVariantProps[]}
         renderItem={({ item }) => {
-          console.log(item.artist);
           return (
             <SongItem
               artist={item.artist}
@@ -36,7 +39,7 @@ export default function AlbumScreen() {
             />
           );
         }}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item, index) => item.videoId + index}
         estimatedItemSize={52}
         ListHeaderComponent={
           <ListSongHeader
@@ -51,7 +54,15 @@ export default function AlbumScreen() {
         }
         ItemSeparatorComponent={ItemSeparator}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          backgroundColor:
+            theme === "light"
+              ? colors.light.background
+              : colors.dark.background,
+          paddingBottom: 20,
+          paddingHorizontal: 16,
+        }}
       />
-    </ThemedSafeAreaView>
+    </ThemedView>
   );
 }

@@ -1,14 +1,17 @@
 import React from "react";
-import { StatusScreen, ThemedSafeAreaView } from "@/components/shared";
+import { StatusScreen, ThemedView } from "@/components/shared";
 import { useLocalSearchParams } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { SongItem } from "@/components/cardItem";
 import { ListSongHeader, ItemSeparator } from "@/components/flashlist";
 import useSWR from "swr";
 import { getPlaylist } from "@/fetch-data/data";
+import { useTheme } from "@/hooks/useTheme";
+import { colors } from "@/constants/color";
 
 export default function PlaylistScreen() {
   const { browseId } = useLocalSearchParams();
+  const { theme } = useTheme();
   const {
     data: playlistData,
     isLoading,
@@ -23,7 +26,7 @@ export default function PlaylistScreen() {
   }
 
   return (
-    <ThemedSafeAreaView>
+    <ThemedView>
       <FlashList
         data={playlistData.contents}
         renderItem={({ item, index }) => (
@@ -50,7 +53,15 @@ export default function PlaylistScreen() {
         }
         ItemSeparatorComponent={ItemSeparator}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          backgroundColor:
+            theme === "light"
+              ? colors.light.background
+              : colors.dark.background,
+          paddingBottom: 20,
+          paddingHorizontal: 16,
+        }}
       />
-    </ThemedSafeAreaView>
+    </ThemedView>
   );
 }

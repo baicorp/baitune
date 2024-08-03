@@ -1,18 +1,29 @@
 import React, { Suspense } from "react";
-import { StatusScreen, ThemedText, ThemedView } from "@/components/shared";
-import { useRouter } from "expo-router";
+import {
+  StatusScreen,
+  ThemedScrollView,
+  ThemedText,
+  ThemedView,
+} from "@/components/shared";
+import { Link, useRouter } from "expo-router";
 import useSWR from "swr";
-import { search } from "@/fetch-data/data";
-import { Pressable, Text, View } from "react-native";
+import { getMoodsAndGenre, search } from "@/fetch-data/data";
+import { Pressable, SectionList, Text, View } from "react-native";
 import { Search } from "@/components/svg";
 import { useTheme } from "@/hooks/useTheme";
 import { colors } from "@/constants/color";
+import { FlashList } from "@shopify/flash-list";
+import { ItemSeparator } from "@/components/flashlist";
+import {
+  ExtractedMoodsAndGenre,
+  MoodsAndgenreItemProps,
+} from "@/constants/type";
 
 export default function Explore() {
   const { theme } = useTheme();
   const router = useRouter();
   return (
-    <ThemedView>
+    <ThemedView style={{ paddingHorizontal: 16 }}>
       <Pressable
         onPress={() => {
           router.push("/explore/search");
@@ -43,12 +54,88 @@ export default function Explore() {
 }
 
 function ExploreData() {
-  const { data: searchData, isLoading } = useSWR("circles", search);
+  const { data: moodsAndGenreData, isLoading } = useSWR(
+    "moodsAndGenre",
+    getMoodsAndGenre
+  );
   if (isLoading) {
     return <StatusScreen message="Loading. . . " />;
   }
-  if (!searchData) {
+  if (!moodsAndGenreData) {
     return <StatusScreen message="failed to fetch data" />;
   }
-  return <ThemedText>hello</ThemedText>;
+  return (
+    <ThemedScrollView>
+      {moodsAndGenreData?.map((data, index) => {
+        return (
+          <VeritcalScroll key={index} data={data?.data} title={data?.title} />
+        );
+      })}
+    </ThemedScrollView>
+    // <SectionList
+    //   sections={moodsAndGenreData}
+    //   renderItem={({ item }) => (
+    //     <MoodsAndgenreItem
+    //       browseId={item?.browseId}
+    //       params={item?.params}
+    //       color={item?.color}
+    //       title={item?.title}
+    //     />
+    //   )}
+    //   renderSectionHeader={({ section: { title } }) => (
+    //     <ThemedText variant="sectionTitle">{title}</ThemedText>
+    //   )}
+    //   ItemSeparatorComponent={ItemSeparator}
+    //   keyExtractor={(item) => item?.browseId + item?.params}
+    //   SectionSeparatorComponent={() => (
+    //     <View style={{ marginBottom: 20 }}></View>
+    //   )}
+    // />
+  );
+}
+
+function MoodsAndgenreItem(data: MoodsAndgenreItemProps & { index: number }) {
+  const router = useRouter();
+  return (
+    <Pressable
+      onPress={() => router.push(`/explore/${data?.browseId}`)}
+      style={{
+        flex: 1,
+        display: "flex",
+        justifyContent: "center",
+        height: 52,
+        backgroundColor: data?.color,
+        paddingHorizontal: 16,
+        borderRadius: 6,
+        marginRight: data.index % 2 === 0 ? 0 : 10,
+      }}
+    >
+      <ThemedText style={{ color: "black" }}>{data?.title}</ThemedText>
+    </Pressable>
+  );
+}
+
+function VeritcalScroll(extractedData: ExtractedMoodsAndGenre) {
+  return (
+    <FlashList
+      data={extractedData.data}
+      renderItem={({ item, index }) => (
+        <MoodsAndgenreItem
+          browseId={item?.browseId}
+          params={item?.params}
+          title={item?.title}
+          color={item?.color}
+          index={index + 1}
+        />
+      )}
+      keyExtractor={(item, index) => item?.browseId + item?.params + index}
+      estimatedItemSize={50}
+      numColumns={2}
+      ItemSeparatorComponent={ItemSeparator}
+      showsVerticalScrollIndicator={false}
+      ListHeaderComponent={
+        <ThemedText variant="sectionTitle">{extractedData?.title}</ThemedText>
+      }
+    />
+  );
 }

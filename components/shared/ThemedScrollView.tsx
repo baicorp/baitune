@@ -7,6 +7,7 @@ export default function ThemedView({ style, ...rest }: ScrollViewProps) {
   const { theme } = useTheme();
   return (
     <ScrollView
+      showsVerticalScrollIndicator={false}
       style={[
         theme === "light" ? globalStyle.viewLight : globalStyle.viewDark,
         { flex: 1 },

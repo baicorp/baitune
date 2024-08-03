@@ -29,11 +29,11 @@ const styleThemedSafeArea = StyleSheet.create({
   containerLight: {
     backgroundColor: colors.light.background,
     flex: 1,
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
   },
   containerDark: {
     backgroundColor: colors.dark.background,
     flex: 1,
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
   },
 });

@@ -37,7 +37,11 @@ export default function PlaylistItem({
           <ThemedText numberOfLines={2} variant="title">
             {title}
           </ThemedText>
-          <ThemedText variant="subtitle" style={{ color: colors.dark.tint }}>
+          <ThemedText
+            variant="subtitle"
+            style={{ color: colors.dark.tint }}
+            numberOfLines={2}
+          >
             {description}
           </ThemedText>
         </View>

@@ -60,6 +60,18 @@ export interface ChannelItemProps extends BaseCardItem {
   subscribers: string;
 }
 
+export type MoodsAndgenreItemProps = {
+  browseId: string;
+  params: string;
+  title: string;
+  color: string;
+};
+
+export type ExtractedMoodsAndGenre = {
+  title: string;
+  data: MoodsAndgenreItemProps[];
+};
+
 export type ContentType =
   | "channel"
   | "song"

@@ -6,6 +6,7 @@ import {
   extractPlaylistData,
   extractNextData,
   extractSearchSuggestionData,
+  extractMoodsAndGenre,
 } from "./dataExtractor";
 
 type urlType = "browse" | "search" | "next";
@@ -77,7 +78,22 @@ export async function getHome() {
   let [dataA, dataB] = await Promise.all([a.json(), b.json()]);
   dataA = extractHomeData(dataA);
   dataB = extractHomeData(dataB);
-  return [...dataA, ...dataB];
+  return [...dataA, ...dataB]?.filter(
+    (object) => JSON.stringify(object) !== "{}"
+  );
+}
+
+export async function getMoodsAndGenre() {
+  const response = await fetch(url("browse"), {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      browseId: "FEmusic_moods_and_genres",
+      ...payload,
+    }),
+  });
+  const data = await response.json();
+  return extractMoodsAndGenre(data);
 }
 
 export async function getPlaylist(browseId: string) {

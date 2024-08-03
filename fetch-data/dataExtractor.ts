@@ -1,6 +1,7 @@
 import {
   ContentType,
   ExtractedAlbumData,
+  ExtractedMoodsAndGenre,
   ExtractedPlaylistData,
 } from "@/constants/type";
 
@@ -585,6 +586,48 @@ export function extractHomeData(data: any) {
             ),
           };
         }
+      }),
+    };
+  });
+}
+
+export function extractMoodsAndGenre(
+  moodsAndGenreObject: any
+): ExtractedMoodsAndGenre[] {
+  function numberToHexColor(colorNumber: number): string {
+    // Extract the RGB values
+    const red = (colorNumber >> 16) & 255;
+    const green = (colorNumber >> 8) & 255;
+    const blue = colorNumber & 255;
+
+    // Convert to hex and pad with zeros
+    const redHex = red.toString(16).padStart(2, "0");
+    const greenHex = green.toString(16).padStart(2, "0");
+    const blueHex = blue.toString(16).padStart(2, "0");
+
+    // Combine and return the hex color
+    return `#${redHex}${greenHex}${blueHex}`;
+  }
+  const contents =
+    moodsAndGenreObject?.contents?.singleColumnBrowseResultsRenderer?.tabs[0]
+      ?.tabRenderer?.content?.sectionListRenderer?.contents;
+  return contents?.map((content: any) => {
+    return {
+      title:
+        content?.gridRenderer?.header?.gridHeaderRenderer?.title?.runs[0]?.text,
+      data: content?.gridRenderer?.items?.map((item: any) => {
+        return {
+          browseId:
+            item?.musicNavigationButtonRenderer?.clickCommand?.browseEndpoint
+              ?.browseId,
+          params:
+            item?.musicNavigationButtonRenderer?.clickCommand?.browseEndpoint
+              ?.params,
+          title: item?.musicNavigationButtonRenderer?.buttonText?.runs[0]?.text,
+          color: numberToHexColor(
+            item?.musicNavigationButtonRenderer?.solid?.leftStripeColor
+          ),
+        };
       }),
     };
   });

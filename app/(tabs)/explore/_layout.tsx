@@ -8,6 +8,7 @@ const ExploreScreenLayout = () => {
       <Stack screenOptions={{ animation: "none", headerShown: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="search" />
+        <Stack.Screen name="moodsandgenre" />
       </Stack>
     </ThemedSafeAreaView>
   );

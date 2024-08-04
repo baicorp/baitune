@@ -851,3 +851,33 @@ export function extractChannelData(channelObject: any) {
         ?.filter((item: any) => item !== undefined),
   };
 }
+
+export function extractSelectedMoodsAndGenre(moodsAndGenreObject: any) {
+  const contents =
+    moodsAndGenreObject?.contents?.singleColumnBrowseResultsRenderer?.tabs[0]
+      ?.tabRenderer?.content?.sectionListRenderer?.contents;
+  return contents?.map((content: any) => {
+    return {
+      title:
+        content?.musicCarouselShelfRenderer?.header
+          ?.musicCarouselShelfBasicHeaderRenderer?.title?.runs[0]?.text,
+      data: content?.musicCarouselShelfRenderer?.contents?.map(
+        (content: any) => {
+          return {
+            browseId:
+              content?.musicTwoRowItemRenderer?.title?.runs[0]
+                ?.navigationEndpoint?.browseEndpoint?.browseId,
+            title: content?.musicTwoRowItemRenderer?.title?.runs[0]?.text,
+            thumbnail:
+              content?.musicTwoRowItemRenderer?.thumbnailRenderer
+                ?.musicThumbnailRenderer?.thumbnail?.thumbnails[0]?.url,
+            description: content?.musicTwoRowItemRenderer?.subtitle?.runs
+              ?.map((run: any) => run?.text)
+              ?.toString()
+              ?.replaceAll(",", ""),
+          };
+        }
+      ),
+    };
+  });
+}

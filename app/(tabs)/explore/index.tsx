@@ -72,25 +72,6 @@ function ExploreData() {
         );
       })}
     </ThemedScrollView>
-    // <SectionList
-    //   sections={moodsAndGenreData}
-    //   renderItem={({ item }) => (
-    //     <MoodsAndgenreItem
-    //       browseId={item?.browseId}
-    //       params={item?.params}
-    //       color={item?.color}
-    //       title={item?.title}
-    //     />
-    //   )}
-    //   renderSectionHeader={({ section: { title } }) => (
-    //     <ThemedText variant="sectionTitle">{title}</ThemedText>
-    //   )}
-    //   ItemSeparatorComponent={ItemSeparator}
-    //   keyExtractor={(item) => item?.browseId + item?.params}
-    //   SectionSeparatorComponent={() => (
-    //     <View style={{ marginBottom: 20 }}></View>
-    //   )}
-    // />
   );
 }
 
@@ -98,7 +79,7 @@ function MoodsAndgenreItem(data: MoodsAndgenreItemProps & { index: number }) {
   const router = useRouter();
   return (
     <Pressable
-      onPress={() => router.push(`/explore/${data?.browseId}`)}
+      onPress={() => router.push(`/explore/moodsandgenre/${data?.params}`)}
       style={{
         flex: 1,
         display: "flex",

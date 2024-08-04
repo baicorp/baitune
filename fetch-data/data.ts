@@ -1,3 +1,4 @@
+import { PlaylistItemProps } from "@/constants/type";
 import {
   extractChannelData,
   extractSearchData,
@@ -7,6 +8,7 @@ import {
   extractNextData,
   extractSearchSuggestionData,
   extractMoodsAndGenre,
+  extractSelectedMoodsAndGenre,
 } from "./dataExtractor";
 
 type urlType = "browse" | "search" | "next";
@@ -174,4 +176,23 @@ export async function next(videoId: string, playlistId: string | null) {
   );
   let data = await response.json();
   return extractNextData(data);
+}
+
+export async function getSelectedMoodsAndGenre(params: string): Promise<
+  {
+    title: string;
+    data: PlaylistItemProps[];
+  }[]
+> {
+  const res = await fetch(url("browse"), {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      browseId: "FEmusic_moods_and_genres_category",
+      params,
+      ...payload,
+    }),
+  });
+  const data = await res.json();
+  return extractSelectedMoodsAndGenre(data);
 }
